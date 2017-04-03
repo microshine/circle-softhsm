@@ -2,9 +2,13 @@ machine:
   node:
     version: 6.9.1
 
-test:
-  pre:
+dependencies:
+  post:
     - bash ./install.sh
+
+test:
+  # pre:
+    # - bash ./install.sh
 
   # override:
     # - npm run coverage
