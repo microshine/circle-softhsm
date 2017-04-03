@@ -1,0 +1,18 @@
+machine:
+  node:
+    version: 6.9.1
+
+test:
+  pre:
+    - bash ./install.sh
+
+  # override:
+    # - npm run coverage
+
+  # post:
+    # - npm run coveralls
+
+general:
+  branches:
+    ignore:
+      - gh-pages
