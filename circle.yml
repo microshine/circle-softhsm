@@ -2,11 +2,11 @@ machine:
   node:
     version: 6.9.1
 
-compile:
-  post:
+dependencies:
+  pre:
     - bash ./install.sh
 
-test:
+# test:
   # pre:
     # - bash ./install.sh
 
