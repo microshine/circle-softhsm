@@ -13,7 +13,7 @@ sudo apt-get install build-essential automake autoconf libtool
 echo
 echo "Installing SoftHSM..."
 echo
-git clone https://github.com/opendnssec/SoftHSMv2.git --branch v2.2.0 --depth 1
+git clone https://github.com/opendnssec/SoftHSMv2.git --branch 2.2.0 --depth 1
 cd SoftHSMv2
 sh ./autogen.sh
 ./configure
