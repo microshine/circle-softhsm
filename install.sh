@@ -15,6 +15,8 @@ echo "Installing SoftHSM..."
 echo
 git clone https://github.com/opendnssec/SoftHSMv2.git --branch 2.2.0 --depth 1
 cd SoftHSMv2
+ls
+sudo libtoolize
 sh ./autogen.sh
 ./configure
 make
