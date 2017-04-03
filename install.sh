@@ -16,7 +16,7 @@ echo
 git clone https://github.com/opendnssec/SoftHSMv2.git --branch 2.2.0 --depth 1
 cd SoftHSMv2
 ls
-sudo libtoolize && sudo aclocal && sudo autoheader && sudo autoconf && sudo automake --add-missing --copy --force-missing --warnings=all
+sudo libtoolize --copy
 ls
 sh ./autogen.sh
 ./configure
