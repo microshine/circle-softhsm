@@ -5,6 +5,7 @@ set -e
 sudo apt-get update -qq
 sudo apt-get install libssl-dev
 sudo apt-get install build-essential autoconf automake libtool
+sudo libtoolize
 
 # Installing SoftHSM
 git clone https://github.com/opendnssec/SoftHSMv2.git -b master --depth 1
