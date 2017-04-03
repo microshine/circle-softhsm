@@ -2,8 +2,8 @@ machine:
   node:
     version: 6.9.1
 
-dependencies:
-  override:
+compile:
+  post:
     - bash ./install.sh
 
 test:
