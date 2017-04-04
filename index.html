@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Test indexed DB</title>
+</head>
+
+<body>
+    <script>
+        // IndexedDB
+        window.indexedDB = window.indexedDB || window.webkitIndexedDB || window.mozIndexedDB || window.OIndexedDB || window.msIndexedDB,
+            IDBTransaction = window.IDBTransaction || window.webkitIDBTransaction || window.OIDBTransaction || window.msIDBTransaction,
+            dbVersion = 1;
+
+        // Create/open database
+        var request = indexedDB.open("test2", dbVersion);
+
+        request.onerror = function (event) {
+            console.log("indexedDB.open error", event)
+        }
+
+        request.onsuccess = function (event) {
+            console.log("Success creating/accessing IndexedDB database");
+            db = request.result;
+
+            db.onerror = function (event) {
+                console.log("Error creating/accessing IndexedDB database");
+            };
+
+            // Interim solution for Google Chrome to create an objectStore. Will be deprecated
+            if (db.setVersion) {
+                if (db.version != dbVersion) {
+                    var setVersion = db.setVersion(dbVersion);
+                    setVersion.onsuccess = function () {
+                        createObjectStore(db);
+                    };
+                }
+            }
+
+            self.putItem = function putItem(data, cb) {
+                console.log("Putting item in IndexedDB");
+
+                // Open a transaction to the database
+                var transaction = db.transaction(["items"], IDBTransaction.READ_WRITE || "readwrite");
+
+                // Put the blob into the dabase
+                var transaction = transaction.objectStore("items").put(data, "my-item");
+                transaction.onsuccess = function (event) {
+                    console.log("putItem:", event.type);
+                    if (cb) {
+                        cb();
+                    }
+                };
+                transaction.onerror = function (event) {
+                    console.error("putItem:error", event);
+                }
+            };
+
+            self.getItem = function getItem() {
+
+                // Open a transaction to the database
+                var transaction = db.transaction(["items"], IDBTransaction.READ_WRITE);
+
+                // Retrieve the file that was just stored
+                var transaction = transaction.objectStore("items").get("my-item")
+                transaction.onsuccess = function (event) {
+                    console.log("getItem:", event.target.result);
+                };
+                transaction.onerror = function (event) {
+                    console.error("getItem:error", event);
+                }
+            };
+
+            // Start test
+            Test()
+        }
+
+        // For future use. Currently only in latest Firefox versions
+        request.onupgradeneeded = function (event) {
+            createObjectStore(event.target.result);
+        };
+
+        function createObjectStore(dataBase) {
+            // Create an objectStore
+            console.log("Creating objectStore")
+            dataBase.createObjectStore("items");
+        }
+
+        function Test() {
+            // var alg = { name: "RSASSA-PKCS1-v1_5", hash: "SHA-256", publicExponent: new Uint8Array([1, 0, 1]), modulusLength: 2048 };
+            var alg = { name: "ECDSA", namedCurve: "P-256" };
+             
+            crypto.subtle.generateKey(alg, false, ["sign", "verify"])
+                .then(function (keys) {
+                    putItem(keys, function() {
+                        getItem();
+                    });
+                })
+                .catch(function (err) {
+                    console.log(err);
+                })
+        }
+    </script>
+</body>
+
+</html>
